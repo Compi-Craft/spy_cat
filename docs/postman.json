@@ -1,0 +1,213 @@
+{
+    "info": {
+      "name": "Spy Cat Agency API",
+      "_postman_id": "abcdef12-3456-7890-abcd-ef1234567890",
+      "description": "Full API for Spy Cat Agency - Cats, Missions and Targets",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Spy Cats",
+        "item": [
+          {
+            "name": "Create Spy Cat",
+            "request": {
+              "method": "POST",
+              "header": [{"key": "Content-Type", "value": "application/json"}],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Whiskers\",\n  \"years_experience\": 5,\n  \"breed\": \"Siamese\",\n  \"salary\": 3000.5\n}"
+              },
+              "url": {
+                "raw": "http://localhost:8000/spy_cats/",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "8000",
+                "path": ["spy_cats"]
+              }
+            }
+          },
+          {
+            "name": "List Spy Cats",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "http://localhost:8000/spy_cats/",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "8000",
+                "path": ["spy_cats"]
+              }
+            }
+          },
+          {
+            "name": "Get Spy Cat by ID",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "http://localhost:8000/spy_cats/1",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "8000",
+                "path": ["spy_cats", "1"]
+              }
+            }
+          },
+          {
+            "name": "Update Spy Cat Salary",
+            "request": {
+              "method": "PUT",
+              "header": [{"key": "Content-Type", "value": "application/json"}],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"salary\": 3500.0\n}"
+              },
+              "url": {
+                "raw": "http://localhost:8000/spy_cats/1",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "8000",
+                "path": ["spy_cats", "1"]
+              }
+            }
+          },
+          {
+            "name": "Delete Spy Cat",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "http://localhost:8000/spy_cats/1",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "8000",
+                "path": ["spy_cats", "1"]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Missions",
+        "item": [
+          {
+            "name": "Create Mission with Targets",
+            "request": {
+              "method": "POST",
+              "header": [{"key": "Content-Type", "value": "application/json"}],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"targets\": [\n    {\"name\": \"Target1\", \"country\": \"CountryA\", \"notes\": \"Initial notes\"},\n    {\"name\": \"Target2\", \"country\": \"CountryB\", \"notes\": \"Initial notes\"}\n  ]\n}"
+              },
+              "url": {
+                "raw": "http://localhost:8000/missions/",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "8000",
+                "path": ["missions"]
+              }
+            }
+          },
+          {
+            "name": "List Missions",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "http://localhost:8000/missions/",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "8000",
+                "path": ["missions"]
+              }
+            }
+          },
+          {
+            "name": "Get Mission by ID",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "http://localhost:8000/missions/1",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "8000",
+                "path": ["missions", "1"]
+              }
+            }
+          },
+          {
+            "name": "Delete Mission",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "http://localhost:8000/missions/1",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "8000",
+                "path": ["missions", "1"]
+              }
+            }
+          },
+          {
+            "name": "Assign Cat to Mission",
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "url": {
+                "raw": "http://localhost:8000/missions/1/assign_cat?cat_id=1",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "8000",
+                "path": ["missions", "1", "assign_cat"],
+                "query": [
+                  {
+                    "key": "cat_id",
+                    "value": "1"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Update Target Notes",
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "url": {
+                "raw": "http://localhost:8000/missions/targets/1/notes?notes=Updated%20notes",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "8000",
+                "path": ["missions", "targets", "1", "notes"],
+                "query": [
+                  {
+                    "key": "notes",
+                    "value": "Updated notes"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Complete Target",
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "url": {
+                "raw": "http://localhost:8000/missions/targets/1/complete",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "8000",
+                "path": ["missions", "targets", "1", "complete"]
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+  
