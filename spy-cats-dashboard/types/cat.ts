@@ -6,10 +6,11 @@ export interface Cat {
     salary: number;
   }
   
-  export interface NewCat {
-    name: string;
-    years_experience: number;
-    breed: string;
-    salary: number;
-  }
+export interface NewCat {
+  name: string;
+  years_experience: number | '';
+  breed: string;
+  salary: number | '';
+}
+
   

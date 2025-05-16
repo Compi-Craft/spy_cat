@@ -14,15 +14,17 @@ export default function AddForm({ onAdded }: { onAdded: () => void }) {
 
   const [error, setError] = useState<string | string[] | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]:
-        e.target.name === 'years_experience' || e.target.name === 'salary'
-          ? parseInt(e.target.value)
-          : e.target.value,
-    });
-  };
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, value } = e.target;
+
+  setFormData({
+    ...formData,
+    [name]:
+      (name === 'years_experience' || name === 'salary')
+        ? value === '' ? '' : parseInt(value)
+        : value,
+  });
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
