@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.orm import Session
-from typing import List, Optional
+from typing import List
 from database import SessionLocal
 import models, schemas
 
@@ -15,7 +15,11 @@ def get_db():
 
 @router.post("/", response_model=schemas.MissionOut, status_code=status.HTTP_201_CREATED)
 def create_mission(mission_data: schemas.MissionCreate, db: Session = Depends(get_db)):
-    mission = models.Mission()
+    # Валідація кількості цілей
+    if not (1 <= len(mission_data.targets) <= 3):
+        raise HTTPException(status_code=400, detail="Mission must have 1 to 3 targets.")
+
+    mission = models.Mission(completed=False)
     db.add(mission)
     db.commit()
     db.refresh(mission)
@@ -42,14 +46,21 @@ def delete_mission(mission_id: int, db: Session = Depends(get_db)):
 def assign_cat_to_mission(mission_id: int, cat_id: int, db: Session = Depends(get_db)):
     mission = db.query(models.Mission).get(mission_id)
     cat = db.query(models.SpyCat).get(cat_id)
+
     if not mission or not cat:
-        raise HTTPException(status_code=404, detail="Mission or cat not found")
+        raise HTTPException(status_code=404, detail="Mission or Cat not found")
+
     if mission.cat_id is not None:
-        raise HTTPException(status_code=400, detail="Mission already assigned")
+        raise HTTPException(status_code=400, detail="Mission already assigned to a cat")
+
+    active = db.query(models.Mission).filter_by(cat_id=cat_id, completed=False).first()
+    if active:
+        raise HTTPException(status_code=400, detail="Cat already has an active mission")
+
     mission.cat_id = cat_id
     db.commit()
     db.refresh(mission)
-    return {"detail": "Cat assigned successfully"}
+    return {"detail": "Cat assigned successfully", "mission_id": mission.id}
 
 @router.put("/targets/{target_id}/notes")
 def update_target_notes(target_id: int, notes: str, db: Session = Depends(get_db)):
@@ -57,7 +68,7 @@ def update_target_notes(target_id: int, notes: str, db: Session = Depends(get_db
     if not target:
         raise HTTPException(status_code=404, detail="Target not found")
     if target.completed or target.mission.completed:
-        raise HTTPException(status_code=400, detail="Cannot update notes on completed target/mission")
+        raise HTTPException(status_code=400, detail="Cannot update notes on completed target or mission")
 
     target.notes = notes
     db.commit()
@@ -69,18 +80,18 @@ def complete_target(target_id: int, db: Session = Depends(get_db)):
     target = db.query(models.Target).get(target_id)
     if not target:
         raise HTTPException(status_code=404, detail="Target not found")
+
     target.completed = True
     db.commit()
     db.refresh(target)
 
-    # Якщо всі цілі виконані — завершити місію
     mission = target.mission
     if all(t.completed for t in mission.targets):
         mission.completed = True
         db.commit()
         db.refresh(mission)
 
-    return target
+    return schemas.TargetOut.from_orm(target)
 
 @router.get("/", response_model=List[schemas.MissionOut])
 def list_missions(db: Session = Depends(get_db)):

@@ -20,7 +20,7 @@ export default function CatCard({ cat, onUpdated }: { cat: Cat, onUpdated: () =>
     <div className="border p-4 rounded space-y-2">
       <h3 className="font-bold">{cat.name}</h3>
       <p>Breed: {cat.breed}</p>
-      <p>Experience: {cat.years_of_experience}</p>
+      <p>Experience: {cat.years_experience}</p>
       <p>Salary: ${cat.salary}</p>
 
       <input type="number" value={newSalary} onChange={e => setNewSalary(Number(e.target.value))} className="border p-1 w-full" />

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from typing import List, Optional
 
 class SpyCatBase(BaseModel):
@@ -29,8 +29,11 @@ class TargetCreate(TargetBase):
 class TargetOut(TargetBase):
     id: int
     completed: bool
-    class Config:
-        orm_mode = True
+    model_config = {
+        "orm_mode": True,
+        "from_attributes": True
+    }
+
 
 class MissionCreate(BaseModel):
     targets: List[TargetCreate]
@@ -38,7 +41,8 @@ class MissionCreate(BaseModel):
 class MissionOut(BaseModel):
     id: int
     completed: bool
+    cat_id: Optional[int]
     targets: List[TargetOut]
-    cat_id: Optional[int] = None
+
     class Config:
         orm_mode = True

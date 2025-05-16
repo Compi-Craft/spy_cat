@@ -29,4 +29,5 @@ class Target(Base):
     completed = Column(Boolean, default=False)
 
     mission_id = Column(Integer, ForeignKey("missions.id"))
-    mission = relationship("Mission", back_populates="targets")
+    mission = relationship("Mission", back_populates="targets", uselist=False, lazy="joined")
+
